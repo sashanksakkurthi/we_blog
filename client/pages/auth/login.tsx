@@ -28,27 +28,22 @@ export default function SignIn() {
     setPassword(event.target.value);
   };
 
+  const urls = `${process.env.NEXT_PUBLIC_BACKEND_URL}/login/`;
+
   const handleLogin = async (event: any) => {
-    event?.preventDefault();
+    const form_data = new FormData();
     cookies.remove("access_token");
-    try {
-      await axios
-        .post(`${process.env.BACKEND_URL}/login`, {
-          username: email,
-          password: password,
-        })
-        .then((response: { data: { status: string } }) => {
-          if (response.data.status !== "error") {
-            cookies.set("access_token", response.data, { path: "/" });
-            router.push("/");
-          } else {
-            router.push("/auth/login");
-          }
+
+    form_data.append("username", email);
+    form_data.append("password", password);
+    await axios.post(urls!, form_data).then((response) => {
+      if (response.status === 200) {
+        cookies.set("access_token", response.data, {
+          path: "/",
         });
-    } catch (error) {
-      router.push("/auth/login");
-      alert("Please check your username and password");
-    }
+        router.push("/");
+      }
+    });
   };
 
   return (
