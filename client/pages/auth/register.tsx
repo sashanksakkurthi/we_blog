@@ -11,7 +11,6 @@ import {
   useColorModeValue,
   Link,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -20,6 +19,8 @@ export default function RegistrationForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const urls = `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/`;
 
   const HandleUsernameInput = (event: any) => {
     setUsername(event?.target.value);
@@ -30,18 +31,23 @@ export default function RegistrationForm() {
   const HandlePasswordInput = (event: any) => {
     setPassword(event?.target.value);
   };
+
   const sendRegisterForm = async () => {
-    await axios
-      .post(`${process.env.BACKEND_URL}/register`, {
+    const response = await fetch(urls, {
+      method: "POST",
+      body: JSON.stringify({
         email: email,
+        name: username,
         password: password,
-        username: username,
-      })
-      .then((response) => {
-        if (response.status === 201) {
-          router.push("/auth/login");
-        }
-      });
+      }),
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    const data = await response.json();
+    if (response.status === 201) {
+      router.push("/auth/login");
+    }
   };
 
   const FieldTemplates = [

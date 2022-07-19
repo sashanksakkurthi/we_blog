@@ -9,7 +9,6 @@ import {
   Heading,
   useColorModeValue,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useState } from "react";
 import Cookies from "universal-cookie";
 import { useRouter } from "next/router";
@@ -36,14 +35,18 @@ export default function SignIn() {
 
     form_data.append("username", email);
     form_data.append("password", password);
-    await axios.post(urls!, form_data).then((response) => {
-      if (response.status === 200) {
-        cookies.set("access_token", response.data, {
-          path: "/",
-        });
-        router.push("/");
-      }
+
+    const response = await fetch(urls, {
+      method: "POST",
+      body: form_data,
     });
+    const data = await response.json();
+    if (response.status === 200) {
+      cookies.set("access_token", data.access_token, {
+        path: "/",
+      });
+      router.push("/");
+    }
   };
 
   return (
