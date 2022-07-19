@@ -3,14 +3,14 @@ from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from ..database import get_db
 from sqlalchemy.orm import Session
 from .. import models
-from . import oauth2
+from .. import oauth2
 
 
-router = APIRouter(prefix="/login", tags=["Authentication"])
+router = APIRouter(prefix="/api/v1/login", tags=["Authentication"])
 
 
 @router.post("/")
-async def get_token(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+async def get_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
 
     user = db.query(models.User).filter(
         models.User.email == form_data.username).first()
@@ -24,7 +24,5 @@ async def get_token(response: Response, form_data: OAuth2PasswordRequestForm = D
 
     access_token = oauth2.create_access_token(data={"email": user.email})
 
-    response.set_cookie(key="access_token",
-                        value=f"Bearer {access_token}", httponly=True)
-
-    return {status.HTTP_200_OK}
+    return {"access_token" : f"Bearer {access_token}" }
+ 
