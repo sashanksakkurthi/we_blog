@@ -20,9 +20,9 @@ def upgrade() -> None:
     op.add_column("comments",sa.Column("post_id",sa.String,nullable=False))
     op.add_column("comments",sa.Column("user_id",sa.String,nullable=False))
     op.create_foreign_key('like_users_fk', source_table="comments", referent_table="users", local_cols=[
-                          'user_id'], remote_cols=['id'], ondelete="CASCADE")
+                          'user_id'], remote_cols=['hash'], ondelete="CASCADE")
     op.create_foreign_key('like_posts_fk', source_table="comments", referent_table="users", local_cols=[
-                          'post_id'], remote_cols=['id'], ondelete="CASCADE")
+                          'post_id'], remote_cols=['hash'], ondelete="CASCADE")
     pass
 
 

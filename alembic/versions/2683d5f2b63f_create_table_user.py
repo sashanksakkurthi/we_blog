@@ -27,6 +27,8 @@ def upgrade() -> None:
     sa.Column('verified',sa.Boolean,server_default='FALSE',nullable=False),
     sa.Column('active',sa.Boolean,server_default='TRUE',nullable=False),
     )
+    pass
 
 def downgrade() -> None:
     op.drop_table('user')
+    pass

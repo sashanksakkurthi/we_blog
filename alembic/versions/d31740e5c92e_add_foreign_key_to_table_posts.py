@@ -19,7 +19,7 @@ depends_on = None
 def upgrade() -> None:
     op.add_column("posts",sa.Column("user_id",sa.String,nullable=False))
     op.create_foreign_key('post_users_fk', source_table="posts", referent_table="users", local_cols=[
-                          'user_id'], remote_cols=['id'], ondelete="CASCADE")
+                          'user_id'], remote_cols=['hash'], ondelete="CASCADE")
     
     pass
 

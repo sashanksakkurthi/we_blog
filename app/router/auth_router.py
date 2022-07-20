@@ -2,9 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from ..database import get_db
 from sqlalchemy.orm import Session
+from ..utils import hashing
 from .. import models
 from .. import oauth2
-
+ 
 
 router = APIRouter(prefix="/api/v1/login", tags=["Authentication"])
 
@@ -18,11 +19,11 @@ async def get_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Sessio
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Invalid email or password")
-    if user.password != form_data.password:
+    if not hashing.verify_password(form_data.password, user.password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Invalid email or password")
 
-    access_token = oauth2.create_access_token(data={"email": user.email})
+    access_token = oauth2.create_access_token(data={"hash": user.hash})
 
     return {"access_token" : f"Bearer {access_token}" }
  
