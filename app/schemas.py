@@ -1,6 +1,10 @@
 import datetime
 from pydantic import UUID4, BaseModel, EmailStr
 
+#used in post router
+class DeletePost(BaseModel):
+    hash:str
+
 # used in post route
 class CreatePost(BaseModel):
     content:str
@@ -43,3 +47,5 @@ class VerifyUser(BaseModel):
 
     class Config:
         orm_mode = True
+
+
