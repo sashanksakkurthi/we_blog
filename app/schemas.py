@@ -1,3 +1,4 @@
+import datetime
 from pydantic import UUID4, BaseModel, EmailStr
 
 # used in post route
@@ -7,9 +8,12 @@ class CreatePost(BaseModel):
 # used in post route
 class PostOut(BaseModel):
     content:str
-    created_at:str
-    publish:bool
+    created_at:datetime.datetime
+    published:bool
     hash:str
+
+    class Config:
+        orm_mode = True
 
 # used in create_user route
 class CreateUser(BaseModel):

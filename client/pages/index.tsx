@@ -1,17 +1,15 @@
+import { Box } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import Authentication from "../hooks/authentication";
+import Navbar from "../common/Navbar";
+import Dashboard from "../components/Dashboard";
 
 const Home: NextPage = () => {
-  const authentication = Authentication();
   return (
     <>
-      {authentication.isAuthenticated ? (
-        <div>
-          {authentication.email} <br /> {authentication.name}
-        </div>
-      ) : (
-        <div>Not authenticated</div>
-      )}
+      <Box bg={"gray.100"}>
+        <Navbar />
+        <Dashboard />
+      </Box>
     </>
   );
 };

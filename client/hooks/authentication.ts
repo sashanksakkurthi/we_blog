@@ -10,6 +10,10 @@ const Authentication = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [hash, setHash] = useState("");
+  const [active, setActive] = useState(true);
+  const [verified, setVerified] = useState(false);
+
   useEffect(() => {
     const isAuthenticated = async () => {
       const response = await fetch(urls, {
@@ -23,13 +27,16 @@ const Authentication = () => {
         setIsAuthenticated(true);
         setEmail(data.email);
         setName(data.name);
+        setHash(data.hash);
+        setActive(data.active);
+        setVerified(data.verified);
       } else {
         setIsAuthenticated(false);
       }
     };
     isAuthenticated();
   }, []);
-  return { isAuthenticated, name, email };
+  return { isAuthenticated, name, email, hash, verified, active, token };
 };
 
 export default Authentication;
